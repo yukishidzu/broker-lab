@@ -42,7 +42,7 @@
 | `background` | `#ffffff` | `#1a1d23` | Редакторы, поля, основная рабочая область |
 | `card` | `#ffffff` | `#1d2026` | Панели, карточки, диалоги |
 | `foreground` | `#20232a` | `#e5e7ed` | Основной текст |
-| `muted-foreground` | `#69707d` | `#969daa` | Пояснения, метаданные, неактивные иконки |
+| `muted-foreground` | `#5f6673` | `#969daa` | Пояснения, метаданные, неактивные иконки |
 | `secondary` | `#f0f2f5` | `#282c34` | Бейджи, заголовки таблиц, вторичные кнопки |
 | `accent` | `#eef1f6` | `#2a2e37` | Hover и спокойное выделение |
 | `border` | `#e2e5ea` | `#30353f` | Границы и разделители |
@@ -83,7 +83,7 @@
   --foreground: #20232a;
   --card: #ffffff;
   --card-foreground: #20232a;
-  --muted-foreground: #69707d;
+  --muted-foreground: #5f6673;
   --secondary: #f0f2f5;
   --secondary-foreground: #363b45;
   --accent: #eef1f6;

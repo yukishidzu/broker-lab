@@ -42,8 +42,8 @@ export function AppHeader({ hash }: { hash: string }) {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-1">
-          <Button variant="outline" size="sm" onClick={() => setSearchOpen(true)} className="max-md:size-9 max-md:px-0" aria-label="Поиск по сайту">
-            <Search size={15} /><span className="max-md:hidden">Поиск</span><kbd className="ml-2 rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground max-lg:hidden">Ctrl K</kbd>
+          <Button variant="outline" size="sm" onClick={() => setSearchOpen(true)} className="max-md:size-9 max-md:px-0">
+            <Search size={15} /><span aria-hidden="true" className="max-md:hidden">Поиск</span><kbd aria-hidden="true" className="ml-2 rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground max-lg:hidden">Ctrl K</kbd><span className="sr-only">Поиск</span>
           </Button>
           <Tooltip label={dark ? 'Включить светлую тему' : 'Включить тёмную тему'}>
             <Button variant="ghost" size="icon" onClick={() => change(dark ? 'light' : 'dark')} aria-label={dark ? 'Включить светлую тему' : 'Включить тёмную тему'}>

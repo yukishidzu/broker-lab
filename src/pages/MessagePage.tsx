@@ -49,7 +49,7 @@ export function MessagePage() {
 
   return (
     <div className="min-h-dvh lg:flex lg:h-[calc(100dvh-61px)] lg:flex-col lg:overflow-hidden">
-      <section className="border-b border-border bg-card px-4 py-3 md:px-5">
+      <section className="border-b border-border bg-card px-4 py-3 md:px-5" aria-label="Информация о сценарии">
         <div className="flex flex-wrap items-center gap-3">
           <div className="min-w-0">
             <div className="flex items-center gap-2"><Badge>S01</Badge><span className="text-xs text-muted-foreground">Нормальный путь</span></div>
