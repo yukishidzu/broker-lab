@@ -66,8 +66,20 @@ test('keeps the mobile scenario usable and contains page overflow', async ({ pag
   expect(overflow).toBe(false)
 })
 
-test('passes automated accessibility checks on the initial workspace', async ({ page }) => {
+test('passes automated accessibility checks in both themes', async ({ page }) => {
   await openRabbit(page)
-  const result = await new AxeBuilder({ page }).analyze()
-  expect(result.violations).toEqual([])
+  const light = await new AxeBuilder({ page }).analyze()
+  expect(light.violations).toEqual([])
+  await page.getByRole('button', { name: 'Включить тёмную тему' }).click()
+  const dark = await new AxeBuilder({ page }).analyze()
+  expect(dark.violations).toEqual([])
+})
+
+test('contains page overflow at reference viewport widths', async ({ page }) => {
+  await openRabbit(page)
+  for (const width of [320, 390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    const dimensions = await page.evaluate(() => ({ page: document.documentElement.scrollWidth, viewport: window.innerWidth }))
+    expect(dimensions.page, `Unexpected page overflow at ${width}px`).toBeLessThanOrEqual(dimensions.viewport)
+  }
 })

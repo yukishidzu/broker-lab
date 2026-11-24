@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { ArrowDown, ArrowRight, Box, Check, Database, GitBranch, ListOrdered, Mail, Network, Split } from 'lucide-react'
 import type { ScenarioDefinition, ScenarioStep, TopologyNode } from '../../types'
 import { cn } from '../../lib/utils'
@@ -37,6 +38,18 @@ function NodeCard({ node, step, branch = false }: { node: TopologyNode; step: Sc
 
 export function TopologyGraph({ scenario, step }: { scenario: ScenarioDefinition; step: ScenarioStep }) {
   const nodeById = new Map(scenario.nodes.map((node) => [node.id, node]))
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = scrollRef.current
+    const target = container?.querySelector<HTMLElement>(`[data-node-id="${step.messageNode}"]`)
+    if (!container || !target || container.scrollWidth <= container.clientWidth) return
+    const containerRect = container.getBoundingClientRect()
+    const targetRect = target.getBoundingClientRect()
+    const left = targetRect.left - containerRect.left + container.scrollLeft - (container.clientWidth - target.clientWidth) / 2
+    container.scrollTo({ left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+  }, [step.id, step.messageNode])
+
   return (
     <section aria-label="Топология сценария" className="min-w-0 p-4 md:p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -46,15 +59,16 @@ export function TopologyGraph({ scenario, step }: { scenario: ScenarioDefinition
         </div>
         <Badge className="bg-primary/10 text-primary">{scenario.broker === 'rabbitmq' ? 'AMQP 0-9-1' : 'Kafka protocol'}</Badge>
       </div>
-      <div className="overflow-x-auto pb-3 scrollbar-thin" tabIndex={0} aria-label="Схема потока; доступна горизонтальная прокрутка">
-        <div className="flex min-w-max items-stretch gap-2">
+      <p className="mb-2 text-[11px] text-muted-foreground lg:hidden">Схема прокручивается горизонтально; текущее сообщение центрируется автоматически.</p>
+      <div ref={scrollRef} className="overflow-x-auto pb-3 scrollbar-thin" tabIndex={0} aria-label="Схема потока; доступна горизонтальная прокрутка">
+        <div className="flex min-w-max items-stretch gap-1">
           {scenario.flow.map((nodeId, index) => {
             const node = nodeById.get(nodeId)!
             const branches = scenario.nodes.filter((candidate) => candidate.branchOf === nodeId)
             return (
-              <div key={nodeId} className="flex items-center gap-2">
-                {index > 0 && <ArrowRight size={18} className="shrink-0 text-muted-foreground" aria-hidden="true" />}
-                <div className="w-[168px]">
+              <div key={nodeId} className="flex items-center gap-1">
+                {index > 0 && <ArrowRight size={14} className="shrink-0 text-muted-foreground" aria-hidden="true" />}
+                <div className="w-[150px]" data-node-id={nodeId}>
                   <NodeCard node={node} step={step} />
                   {branches.map((branch) => (
                     <div key={branch.id} className="relative pt-6">
