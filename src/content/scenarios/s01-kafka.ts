@@ -17,7 +17,7 @@ export const kafkaScenario: ScenarioDefinition = {
   nodes: [
     { id: 'order-service', title: 'Сервис заказов', subtitle: 'producer · acks=all', kind: 'service', badge: 'Producer' },
     { id: 'orders-partition', title: 'orders · partition 1', subtitle: 'leader · broker 2', kind: 'log', badge: 'Partition' },
-    { id: 'orders-replicas', title: 'ISR · 2 реплики', subtitle: 'broker 1 + broker 2', kind: 'log', badge: 'Replicas' },
+    { id: 'orders-replicas', title: 'ISR · 2 реплики', subtitle: 'broker 1 + broker 2', kind: 'log', badge: 'Replicas', branchOf: 'orders-partition' },
     { id: 'billing-service', title: 'Платёжный сервис', subtitle: 'group billing · consumer 1', kind: 'service', badge: 'Consumer' },
     { id: 'billing-db', title: 'БД платежей', subtitle: 'внешний эффект', kind: 'database', badge: 'Effect' },
   ],

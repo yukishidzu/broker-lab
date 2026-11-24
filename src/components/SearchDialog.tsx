@@ -1,0 +1,60 @@
+import { useMemo, useState } from 'react'
+import { ArrowRight, BookOpen, Search, Waypoints } from 'lucide-react'
+import { glossaryTerms } from '../content/glossary'
+import { scenarioList } from '../content/scenarios'
+import { Dialog, DialogContent } from './ui/dialog'
+import { Input } from './ui/input'
+
+export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  const [query, setQuery] = useState('')
+  const normalized = query.trim().toLocaleLowerCase('ru')
+  const terms = useMemo(() => glossaryTerms.filter((term) => {
+    if (!normalized) return true
+    return `${term.title} ${term.english} ${term.short}`.toLocaleLowerCase('ru').includes(normalized)
+  }).slice(0, 8), [normalized])
+  const scenarios = scenarioList.filter((scenario) => {
+    if (!normalized) return true
+    return `${scenario.name} ${scenario.description}`.toLocaleLowerCase('ru').includes(normalized)
+  })
+
+  const navigate = (hash: string) => {
+    location.hash = hash
+    onOpenChange(false)
+    setQuery('')
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent title="Поиск по Broker Lab" description="Найдите сценарий, термин или английское название настройки.">
+        <label className="relative block">
+          <span className="sr-only">Поисковый запрос</span>
+          <Search className="pointer-events-none absolute left-3 top-3 text-muted-foreground" size={16} />
+          <Input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} className="pl-9" placeholder="Например, offset или confirm" />
+        </label>
+        <div className="mt-5 max-h-[55vh] overflow-auto scrollbar-thin">
+          {scenarios.length > 0 && <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Сценарии</h3>}
+          <div className="space-y-1">
+            {scenarios.map((scenario) => (
+              <button key={scenario.broker} onClick={() => navigate(`/message/s01?broker=${scenario.broker}`)} className="flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5 text-left hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring">
+                <Waypoints size={17} className="shrink-0 text-primary" />
+                <span className="min-w-0 flex-1"><span className="block text-sm font-medium">{scenario.name}</span><span className="mt-0.5 block truncate text-xs text-muted-foreground">{scenario.description}</span></span>
+                <ArrowRight size={15} className="text-muted-foreground" />
+              </button>
+            ))}
+          </div>
+          {terms.length > 0 && <h3 className="mb-2 mt-5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Глоссарий</h3>}
+          <div className="space-y-1">
+            {terms.map((term) => (
+              <button key={term.id} onClick={() => navigate(`/glossary/${term.id}`)} className="flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5 text-left hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring">
+                <BookOpen size={16} className="shrink-0 text-muted-foreground" />
+                <span className="min-w-0 flex-1"><span className="block text-sm font-medium">{term.title} <code className="font-mono text-xs font-normal text-muted-foreground">{term.english}</code></span><span className="mt-0.5 block truncate text-xs text-muted-foreground">{term.short}</span></span>
+                <ArrowRight size={15} className="text-muted-foreground" />
+              </button>
+            ))}
+          </div>
+          {!scenarios.length && !terms.length && <p className="py-8 text-center text-sm text-muted-foreground">Ничего не найдено. Попробуйте «queue», «offset» или «подтверждение».</p>}
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}

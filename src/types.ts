@@ -23,6 +23,7 @@ export interface TopologyNode {
   subtitle: string
   kind: NodeKind
   badge?: string
+  branchOf?: string
 }
 
 export interface ScenarioMessage {
