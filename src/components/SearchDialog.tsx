@@ -11,6 +11,9 @@ const referencePages = [
   { title: 'RabbitMQ routing', description: 'Direct, topic, fanout, headers и bindings', hash: '/labs/routing', keywords: 'exchange direct topic fanout headers routing binding маршрутизация' },
   { title: 'Retry и DLQ', description: 'Backoff, poison message, DLX и retry topics', hash: '/labs/retry', keywords: 'retry dlq dlx backoff poison повторы доставка' },
   { title: 'Capacity и lag', description: 'Нагрузка, consumers, partitions и backlog', hash: '/labs/capacity', keywords: 'capacity lag backlog throughput нагрузка partitions consumers' },
+  { title: 'Schema evolution', description: 'Compatibility, defaults и Schema Registry', hash: '/systems/schema', keywords: 'schema registry avro backward forward full compatibility схема' },
+  { title: 'Distributed tracing', description: 'TraceId, spans, correlation и causation', hash: '/systems/tracing', keywords: 'trace tracing span opentelemetry traceparent correlation causation' },
+  { title: 'Replication и failover', description: 'Kafka ISR и RabbitMQ quorum queues', hash: '/systems/failover', keywords: 'replication failover isr acks minisr unclean quorum raft репликация' },
 ]
 
 export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {

@@ -5,6 +5,7 @@ import { GlossaryPage } from './pages/GlossaryPage'
 import { DeliveryPage } from './pages/DeliveryPage'
 import { KafkaGroupsPage } from './pages/KafkaGroupsPage'
 import { LabsPage } from './pages/LabsPage'
+import { SystemsPage } from './pages/SystemsPage'
 import { MessagePage } from './pages/MessagePage'
 import { ScenariosPage } from './pages/ScenariosPage'
 
@@ -25,6 +26,7 @@ export default function App() {
   else if (path === '#/delivery') page = <DeliveryPage />
   else if (path === '#/kafka-groups') page = <KafkaGroupsPage />
   else if (path.startsWith('#/labs/')) page = <LabsPage tab={path.slice('#/labs/'.length)} />
+  else if (path.startsWith('#/systems/')) page = <SystemsPage tab={path.slice('#/systems/'.length)} />
   else if (glossary) page = <GlossaryPage termId={glossary[1]} />
   else if (path === '#/glossary') page = <GlossaryPage />
   else page = <main className="mx-auto max-w-lg px-5 py-16 text-center"><h1 className="text-xl font-semibold">Раздел не найден</h1><p className="mt-2 text-sm text-muted-foreground">Вернитесь к пути первого сообщения.</p><Button className="mt-5" onClick={() => { location.hash = '/message/s01' }}>Открыть сценарий</Button></main>

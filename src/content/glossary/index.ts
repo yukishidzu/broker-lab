@@ -221,6 +221,48 @@ export const glossaryTerms: GlossaryTerm[] = [
     description: 'Для простой последовательной модели: активные consumers × 1000 / время обработки в мс. Реальный результат дополнительно ограничен БД, downstream, сетью, batching и брокером.',
     mistake: 'Количество запущенных consumers не равно полезному параллелизму, если partitions меньше или есть другой bottleneck.', source: kafkaSource,
   },
+  {
+    id: 'schema-registry', title: 'Schema Registry', english: 'schema registry / subject', category: 'Kafka',
+    short: 'Сервис хранения и версионирования схем с правилами совместимости.',
+    description: 'Producers и consumers ссылаются на версии схем, а registry проверяет регистрацию по настройке compatibility. Передача schema id и сериализация зависят от выбранного формата и клиента.',
+    mistake: 'Registry не гарантирует смысловую корректность payload и не обновляет код consumers автоматически.', source: { title: 'Schema Registry — evolution', url: 'https://docs.confluent.io/platform/current/schema-registry/fundamentals/schema-evolution.html' },
+  },
+  {
+    id: 'compatibility', title: 'Schema compatibility', english: 'backward / forward / full', category: 'Надёжность',
+    short: 'Правила, определяющие какие readers и writers могут работать с разными версиями схемы.',
+    description: 'Backward: новый reader читает старые данные. Forward: старый reader читает новые данные. Full требует оба направления. Transitive режимы расширяют проверку на более ранние версии.',
+    mistake: 'Совместимость схемы не равна совместимости бизнес-семантики поля.', source: { title: 'Avro — schema resolution', url: 'https://avro.apache.org/docs/1.12.0/specification/#schema-resolution' },
+  },
+  {
+    id: 'trace-context', title: 'Trace context', english: 'traceId / spanId / parentSpanId', category: 'Надёжность',
+    short: 'Метаданные, связывающие spans одной распределённой операции.',
+    description: 'TraceId объединяет операцию, spanId обозначает отдельный интервал работы, parentSpanId задаёт родителя. W3C traceparent передаёт часть контекста между участниками.',
+    mistake: 'Если producer не внедрил, а consumer не извлёк context, общий trace может разорваться.', source: { title: 'W3C Trace Context', url: 'https://www.w3.org/TR/trace-context/' },
+  },
+  {
+    id: 'correlation-id', title: 'Correlation ID', english: 'correlation id / business id', category: 'Надёжность',
+    short: 'Общий идентификатор для связывания сообщений и операций одного бизнес-процесса.',
+    description: 'Например, orderId сохраняется во всех событиях заказа. Он помогает искать записи в логах, но не описывает иерархию spans и их длительность.',
+    mistake: 'Correlation ID не обязан совпадать с traceId или messageId.', source: { title: 'OpenTelemetry — messaging', url: 'https://opentelemetry.io/docs/specs/semconv/messaging/' },
+  },
+  {
+    id: 'causation-id', title: 'Causation ID', english: 'causation id / causedBy', category: 'Надёжность',
+    short: 'Идентификатор события или команды, которые вызвали текущее сообщение.',
+    description: 'Causation связывает PaymentProcessed с OrderCreated, тогда как correlation связывает весь заказ. Значение передаётся приложением в metadata.',
+    mistake: 'Causation не то же самое, что parentSpanId: одно относится к бизнес-событиям, другое — к tracing spans.', source: { title: 'OpenTelemetry — messaging', url: 'https://opentelemetry.io/docs/specs/semconv/messaging/' },
+  },
+  {
+    id: 'quorum', title: 'Quorum', english: 'quorum / majority', category: 'Надёжность',
+    short: 'Большинство members, необходимое для согласованного решения распределённой группы.',
+    description: 'Для группы из трёх кворум — два. RabbitMQ quorum queues используют Raft; потеря minority сохраняет работу, потеря majority блокирует её.',
+    mistake: 'Один оставшийся узел из трёх не должен продолжать запись как самостоятельная majority.', source: { title: 'RabbitMQ — quorum queues', url: 'https://www.rabbitmq.com/docs/quorum-queues' },
+  },
+  {
+    id: 'unclean-election', title: 'Unclean leader election', english: 'unclean.leader.election.enable', category: 'Kafka',
+    short: 'Разрешение out-of-sync реплике стать partition leader при отсутствии ISR candidates.',
+    description: 'Это может восстановить доступность, но записи, которых нет на новой реплике, будут потеряны. Поэтому настройку рассматривают как явный компромисс.',
+    mistake: 'Новый leader после unclean election не означает сохранение всех ранее подтверждённых записей.', source: { title: 'Kafka — replication', url: 'https://kafka.apache.org/documentation/#replication' },
+  },
 ]
 
 export const glossaryById = new Map(glossaryTerms.map((term) => [term.id, term]))
