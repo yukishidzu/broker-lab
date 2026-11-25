@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Network, Split } from 'lucide-react'
+import { ArrowRight, Check, Network, ShieldCheck, Split, UsersRound } from 'lucide-react'
 import { scenarioList } from '../content/scenarios'
 import { Badge } from '../components/ui/badge'
 
@@ -25,6 +25,13 @@ export function ScenariosPage() {
               <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-border pt-4 text-xs text-muted-foreground"><span>{scenario.steps.length} шагов</span><span className="inline-flex items-center gap-1"><Check size={12} className="text-success" />Журнал и инспектор</span></div>
             </a>
           ))}
+        </div>
+      </section>
+      <section className="mt-10" aria-labelledby="practical-labs">
+        <div className="mb-4"><h2 id="practical-labs" className="text-base font-semibold">Практические разборы</h2><p className="mt-1 text-xs text-muted-foreground">Отдельные модели для отказов, подтверждений и распределения partitions.</p></div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <a href="#/delivery" className="group rounded-xl border border-border bg-card p-5 hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-ring"><ShieldCheck size={22} className="text-primary" /><h3 className="mt-4 font-semibold">Гарантии доставки</h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">At most once, at least once и Kafka transactions. Сбой до/после эффекта, redelivery и идемпотентность.</p><span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-primary">Открыть разбор<ArrowRight size={14} /></span></a>
+          <a href="#/kafka-groups" className="group rounded-xl border border-border bg-card p-5 hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-ring"><UsersRound size={22} className="text-primary" /><h3 className="mt-4 font-semibold">Kafka consumer groups</h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">Настройка partitions и consumers, 4 consumers на 2 partitions, несколько partitions на consumer, две группы и rebalance.</p><span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-primary">Открыть лабораторию<ArrowRight size={14} /></span></a>
         </div>
       </section>
       <section className="mt-10 rounded-xl border border-border bg-card p-5">

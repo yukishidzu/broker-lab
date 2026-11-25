@@ -9,6 +9,8 @@ import { Tooltip } from './ui/tooltip'
 const navigation = [
   { href: '#/message/s01', label: 'Сообщение', match: '#/message' },
   { href: '#/scenarios', label: 'Сценарии', match: '#/scenarios' },
+  { href: '#/delivery', label: 'Гарантии', match: '#/delivery' },
+  { href: '#/kafka-groups', label: 'Группы', match: '#/kafka-groups' },
   { href: '#/glossary', label: 'Глоссарий', match: '#/glossary' },
 ]
 
@@ -45,7 +47,7 @@ export function AppHeader({ hash }: { hash: string }) {
           <span className="grid size-8 place-items-center rounded-lg bg-primary text-primary-foreground"><Waypoints size={17} /></span>
           <span>Broker Lab</span>
         </a>
-        <nav className="ml-5 hidden items-center gap-1 md:flex" aria-label="Основная навигация">
+        <nav className="ml-5 hidden items-center gap-1 lg:flex" aria-label="Основная навигация">
           {navigation.map((item) => (
             <a key={item.href} href={item.href} className={cn('rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring', hash.startsWith(item.match) && 'bg-secondary text-secondary-foreground')}>
               {item.label}
@@ -66,9 +68,9 @@ export function AppHeader({ hash }: { hash: string }) {
           </Tooltip>
         </div>
       </div>
-      <nav className="grid grid-cols-3 border-t border-border/70 px-2 py-1.5 md:hidden" aria-label="Основная навигация на мобильном">
+      <nav className="grid grid-cols-5 border-t border-border/70 px-2 py-1.5 lg:hidden" aria-label="Основная навигация на мобильном">
         {navigation.map((item) => (
-          <a key={item.href} href={item.href} className={cn('rounded-md px-2 py-2 text-center text-xs font-medium text-muted-foreground focus-visible:outline-2 focus-visible:outline-ring', hash.startsWith(item.match) && 'bg-secondary text-secondary-foreground')}>
+          <a key={item.href} href={item.href} className={cn('rounded-md px-1 py-2 text-center text-[11px] font-medium text-muted-foreground focus-visible:outline-2 focus-visible:outline-ring', hash.startsWith(item.match) && 'bg-secondary text-secondary-foreground')}>
             {item.label}
           </a>
         ))}

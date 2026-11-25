@@ -5,6 +5,11 @@ import { scenarioList } from '../content/scenarios'
 import { Dialog, DialogContent } from './ui/dialog'
 import { Input } from './ui/input'
 
+const referencePages = [
+  { title: 'Гарантии доставки', description: 'At most once, at least once, transactions и идемпотентность', hash: '/delivery', keywords: 'гарантии доставка exactly at least at most дубли ack commit' },
+  { title: 'Kafka consumer groups', description: 'Partitions, consumers, две группы и rebalance', hash: '/kafka-groups', keywords: 'consumer group партиции partitions consumers rebalance группы' },
+]
+
 export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
   const [query, setQuery] = useState('')
   const normalized = query.trim().toLocaleLowerCase('ru')
@@ -16,6 +21,7 @@ export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChan
     if (!normalized) return true
     return `${scenario.name} ${scenario.description}`.toLocaleLowerCase('ru').includes(normalized)
   })
+  const pages = referencePages.filter((page) => !normalized || `${page.title} ${page.description} ${page.keywords}`.toLocaleLowerCase('ru').includes(normalized))
 
   const navigate = (hash: string) => {
     location.hash = hash
@@ -32,7 +38,11 @@ export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChan
           <Input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} className="pl-9" placeholder="Например, offset или confirm" />
         </label>
         <div className="mt-5 max-h-[55vh] overflow-auto scrollbar-thin">
-          {scenarios.length > 0 && <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Сценарии</h3>}
+          {pages.length > 0 && <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Разделы</h3>}
+          <div className="space-y-1">
+            {pages.map((page) => <button key={page.hash} onClick={() => navigate(page.hash)} className="flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5 text-left hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring"><Waypoints size={17} className="shrink-0 text-primary" /><span className="min-w-0 flex-1"><span className="block text-sm font-medium">{page.title}</span><span className="mt-0.5 block truncate text-xs text-muted-foreground">{page.description}</span></span><ArrowRight size={15} className="text-muted-foreground" /></button>)}
+          </div>
+          {scenarios.length > 0 && <h3 className="mb-2 mt-5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Сценарии</h3>}
           <div className="space-y-1">
             {scenarios.map((scenario) => (
               <button key={scenario.broker} onClick={() => navigate(`/message/s01?broker=${scenario.broker}`)} className="flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5 text-left hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring">
@@ -52,7 +62,7 @@ export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChan
               </button>
             ))}
           </div>
-          {!scenarios.length && !terms.length && <p className="py-8 text-center text-sm text-muted-foreground">Ничего не найдено. Попробуйте «queue», «offset» или «подтверждение».</p>}
+          {!pages.length && !scenarios.length && !terms.length && <p className="py-8 text-center text-sm text-muted-foreground">Ничего не найдено. Попробуйте «queue», «offset» или «подтверждение».</p>}
         </div>
       </DialogContent>
     </Dialog>

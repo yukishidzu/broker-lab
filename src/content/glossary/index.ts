@@ -137,6 +137,48 @@ export const glossaryTerms: GlossaryTerm[] = [
     description: 'Consumer может сохранять уникальный идентификатор операции вместе с результатом и игнорировать уже применённый повтор. Конкретная реализация зависит от внешней системы.',
     mistake: 'Повторная доставка может существовать даже при идемпотентной обработке: повторяется попытка, но не бизнес-эффект.', source: confirmSource,
   },
+  {
+    id: 'rebalance', title: 'Rebalance', english: 'consumer group rebalance', category: 'Kafka',
+    short: 'Перераспределение partitions после изменения состава группы или топологии.',
+    description: 'Добавление, удаление или отказ consumer меняет назначения. Конкретный результат зависит от assignor и протокола, но каждая partition остаётся назначенной одному consumer группы.',
+    mistake: 'Rebalance не означает, что каждый consumer всегда получает ровно одну partition.', source: kafkaSource,
+  },
+  {
+    id: 'assignment', title: 'Partition assignment', english: 'partition assignment', category: 'Kafka',
+    short: 'Назначение partitions конкретным members consumer group.',
+    description: 'При partitions больше consumers один consumer получает несколько partitions. При consumers больше partitions лишние members простаивают. Максимальный параллелизм группы ограничен числом partitions.',
+    mistake: 'Сообщения одной partition не делятся между несколькими consumers одной группы одновременно.', source: kafkaSource,
+  },
+  {
+    id: 'at-most-once', title: 'At most once', english: 'at-most-once delivery', category: 'Надёжность',
+    short: 'Обработка может быть пропущена, но не должна повторяться автоматически.',
+    description: 'В Kafka ранний commit до обработки может пропустить эффект при сбое. В RabbitMQ похожий риск даёт auto-ack или ack до обработки.',
+    mistake: 'At most once не означает, что сообщение всегда обработано ровно один раз.', source: kafkaSource,
+  },
+  {
+    id: 'at-least-once', title: 'At least once', english: 'at-least-once delivery', category: 'Надёжность',
+    short: 'Система стремится не потерять обработку, допуская повторные попытки.',
+    description: 'Обработка выполняется до commit/ack. Сбой после внешнего эффекта, но до подтверждения, приводит к повторному чтению или redelivery.',
+    mistake: 'At least once не гарантирует ровно один бизнес-эффект без идемпотентности.', source: kafkaSource,
+  },
+  {
+    id: 'exactly-once', title: 'Exactly once', english: 'exactly-once semantics', category: 'Надёжность',
+    short: 'Гарантия всегда имеет конкретную границу и набор условий.',
+    description: 'Для Kafka read-process-write output records и input offsets могут фиксироваться атомарно через transactions, а read_committed скрывает aborted output. Внешние системы требуют собственной координации.',
+    mistake: 'Нельзя переносить exactly-once внутри Kafka на любую внешнюю БД или побочный эффект.', source: kafkaSource,
+  },
+  {
+    id: 'inbox', title: 'Inbox', english: 'inbox pattern', category: 'Надёжность',
+    short: 'Сохранение идентификаторов обработанных сообщений для дедупликации consumer.',
+    description: 'Inbox-запись и бизнес-эффект сохраняются атомарно, обычно с уникальным ограничением eventId. Повторная доставка не создаёт новый эффект.',
+    mistake: 'Проверка и запись inbox без атомарности оставляют гонку при параллельных попытках.', source: confirmSource,
+  },
+  {
+    id: 'outbox', title: 'Outbox', english: 'transactional outbox', category: 'Надёжность',
+    short: 'Атомарное сохранение бизнес-изменения и исходящего события в БД producer.',
+    description: 'Отдельный publisher переносит outbox-записи в брокер и может повторять публикацию. Поэтому consumer всё равно должен учитывать дубли.',
+    mistake: 'Outbox не делает публикацию и consumer-обработку одной глобальной транзакцией.', source: kafkaSource,
+  },
 ]
 
 export const glossaryById = new Map(glossaryTerms.map((term) => [term.id, term]))

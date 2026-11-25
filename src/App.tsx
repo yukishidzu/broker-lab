@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { AppHeader } from './components/AppHeader'
 import { Button } from './components/ui/button'
 import { GlossaryPage } from './pages/GlossaryPage'
+import { DeliveryPage } from './pages/DeliveryPage'
+import { KafkaGroupsPage } from './pages/KafkaGroupsPage'
 import { MessagePage } from './pages/MessagePage'
 import { ScenariosPage } from './pages/ScenariosPage'
 
@@ -19,6 +21,8 @@ export default function App() {
   let page
   if (path === '#/' || path.startsWith('#/message/')) page = <MessagePage key={hash} />
   else if (path === '#/scenarios') page = <ScenariosPage />
+  else if (path === '#/delivery') page = <DeliveryPage />
+  else if (path === '#/kafka-groups') page = <KafkaGroupsPage />
   else if (glossary) page = <GlossaryPage termId={glossary[1]} />
   else if (path === '#/glossary') page = <GlossaryPage />
   else page = <main className="mx-auto max-w-lg px-5 py-16 text-center"><h1 className="text-xl font-semibold">Раздел не найден</h1><p className="mt-2 text-sm text-muted-foreground">Вернитесь к пути первого сообщения.</p><Button className="mt-5" onClick={() => { location.hash = '/message/s01' }}>Открыть сценарий</Button></main>
