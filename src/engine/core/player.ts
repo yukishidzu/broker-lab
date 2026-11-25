@@ -21,7 +21,8 @@ export function scenarioFor(broker: Broker) {
 }
 
 export function clampStep(scenario: ScenarioDefinition, index: number) {
-  return Math.max(0, Math.min(scenario.steps.length - 1, Math.trunc(index)))
+  const normalized = Number.isFinite(index) ? Math.trunc(index) : 0
+  return Math.max(0, Math.min(scenario.steps.length - 1, normalized))
 }
 
 export function stepAt(scenario: ScenarioDefinition, index: number) {
@@ -55,10 +56,22 @@ export function logThrough(scenario: ScenarioDefinition, index: number): LogEntr
 export function validateScenario(scenario: ScenarioDefinition) {
   const errors: string[] = []
   const ids = new Set<string>()
-  const nodes = new Set(scenario.nodes.map((node) => node.id))
+  const nodes = new Set<string>()
   let previousMs = -1
+  let effectCommitted = false
 
   if (!scenario.steps.length) errors.push('Сценарий должен содержать шаги')
+  for (const node of scenario.nodes) {
+    if (nodes.has(node.id)) errors.push(`Повторяющийся узел: ${node.id}`)
+    nodes.add(node.id)
+  }
+  for (const node of scenario.nodes) {
+    if (node.branchOf) {
+      if (!nodes.has(node.branchOf)) errors.push(`Неизвестный родитель ветки: ${node.branchOf}`)
+      if (node.branchOf === node.id) errors.push(`Узел ссылается на себя: ${node.id}`)
+      if (scenario.flow.includes(node.id)) errors.push(`Ветка не должна входить в основной flow: ${node.id}`)
+    }
+  }
   for (const nodeId of scenario.flow) {
     if (!nodes.has(nodeId)) errors.push(`Неизвестный узел flow: ${nodeId}`)
   }
@@ -70,7 +83,13 @@ export function validateScenario(scenario: ScenarioDefinition) {
       if (!nodes.has(nodeId)) errors.push(`Неизвестный активный узел: ${nodeId}`)
     }
     if (step.event.atMs < previousMs) errors.push(`Нарушено время событий на шаге ${step.id}`)
+    if (effectCommitted && !step.effectCommitted) errors.push(`Внешний эффект исчез на шаге ${step.id}`)
+    if (!step.source.url.startsWith('https://')) errors.push(`Небезопасный источник на шаге ${step.id}`)
+    if (!step.summary.trim() || !step.explanation.trim()) errors.push(`Пустое объяснение на шаге ${step.id}`)
+    effectCommitted = step.effectCommitted
     previousMs = step.event.atMs
   }
+  if (scenario.steps[0]?.milestone !== 'event') errors.push('Сценарий должен начинаться с бизнес-события')
+  if (scenario.steps.at(-1)?.milestone !== 'settle') errors.push('Сценарий должен завершаться подтверждением')
   return errors
 }

@@ -121,7 +121,7 @@ export const rabbitScenario: ScenarioDefinition = {
       technical: ['basic.ack отправлен на том же channel, где получен tag 42.', 'Ready = 0, unacknowledged = 0.', 'Нормальный путь завершён.'],
       activeNodes: ['billing-service', 'billing-queue'], messageNode: 'billing-queue', messageStatus: 'Доставка завершена · сообщение удалено из queue',
       producerStatus: 'Publisher confirm получен', deliveryStatus: 'settled', effectCommitted: true, retained: false,
-      metadata: { ready: 0, unacknowledged: 0 }, terms: ['consumer-ack'], source: confirms,
+      metadata: { ready: 0, unacknowledged: 0, effectId: 'payment-1042' }, terms: ['consumer-ack'], source: confirms,
       event: { atMs: 760, source: 'Платёжный сервис', target: 'Queue billing', action: 'basic.ack · tag 42', result: 'Доставка завершена', kind: 'confirmation' },
     },
   ],

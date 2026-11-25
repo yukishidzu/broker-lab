@@ -103,14 +103,14 @@ export const glossaryTerms: GlossaryTerm[] = [
   },
   {
     id: 'commit', title: 'Offset commit', english: 'offset commit', category: 'Kafka',
-    short: 'Фиксация позиции, до которой consumer group обработала чтение.',
-    description: 'После восстановления consumer начинает с зафиксированной позиции. Момент commit относительно обработки определяет возможность пропуска или повторной обработки записей.',
+    short: 'Сохранённая группой позиция следующего чтения в partition.',
+    description: 'Committed position — это сохранённая позиция, к которой consumer вернётся после перезапуска. Обычно commit выполняют после обработки, но само сохранение offset не доказывает наличие внешнего бизнес-эффекта.',
     mistake: 'Commit не откатывает внешний эффект и не подтверждает его атомарно.', source: kafkaSource,
   },
   {
     id: 'lag', title: 'Consumer lag', english: 'consumer lag', category: 'Kafka',
-    short: 'Отставание позиции consumer от конца log.',
-    description: 'Lag наблюдается по каждой partition. Он помогает увидеть накопление необработанных записей, но сам по себе не называет первопричину.',
+    short: 'Разница между концом log и позицией consumer в partition.',
+    description: 'Lag рассчитывают по текущей или committed позиции — это нужно указывать при интерпретации метрики. Локальная position автоматически продвигается после poll, тогда как committed position меняется только при commit.',
     mistake: 'Lag и количество ready-сообщений в RabbitMQ queue — разные метрики разных моделей.', source: kafkaSource,
   },
   {

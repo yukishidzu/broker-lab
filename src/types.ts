@@ -13,7 +13,7 @@ export type Milestone =
   | 'process'
   | 'settle'
 
-export type DeliveryStatus = 'not-created' | 'ready' | 'unacked' | 'settled' | 'committed'
+export type DeliveryStatus = 'not-created' | 'ready' | 'unacked' | 'processing' | 'settled' | 'committed'
 
 export type NodeKind = 'service' | 'exchange' | 'queue' | 'log' | 'database'
 
