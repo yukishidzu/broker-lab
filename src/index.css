@@ -97,6 +97,10 @@ button, a, select { touch-action: manipulation; }
 
 .scrollbar-thin { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 
+@media (max-width: 767px) {
+  .code-block { font-size: 14px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;

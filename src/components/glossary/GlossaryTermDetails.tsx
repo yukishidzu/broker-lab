@@ -17,7 +17,7 @@ export function GlossaryTermDetails({ term, onOpenScenario }: { term: GlossaryTe
         <p className="mt-1.5 text-sm leading-relaxed">{term.mistake}</p>
       </section>
       <div className="flex flex-wrap gap-2">
-        {onOpenScenario && <Button variant="outline" size="sm" onClick={onOpenScenario}>Открыть на схеме</Button>}
+        {onOpenScenario && <Button variant="outline" size="sm" onClick={onOpenScenario} className="h-10">Открыть на схеме</Button>}
         <a href={term.source.url} target="_blank" rel="noreferrer" className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring">
           {term.source.title}<ArrowUpRight size={14} />
         </a>

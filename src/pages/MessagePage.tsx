@@ -48,7 +48,7 @@ export function MessagePage() {
   }
 
   return (
-    <div className="min-h-dvh lg:flex lg:h-[calc(100dvh-61px)] lg:flex-col lg:overflow-hidden">
+    <div className="min-h-dvh pb-[108px] lg:flex lg:h-[calc(100dvh-61px)] lg:min-h-0 lg:flex-col lg:overflow-hidden lg:pb-0">
       <section className="border-b border-border bg-card px-4 py-3 md:px-5" aria-label="Информация о сценарии">
         <div className="flex flex-wrap items-center gap-3">
           <div className="min-w-0">
@@ -69,7 +69,7 @@ export function MessagePage() {
         </label>
       </section>
 
-      <nav className="grid grid-cols-3 border-b border-border bg-card px-2 py-1.5 lg:hidden" aria-label="Представления сценария">
+      <nav className="sticky top-[108px] z-20 grid grid-cols-3 border-b border-border bg-card px-2 py-1.5 lg:hidden" aria-label="Представления сценария">
         <MobileTabButton active={mobileTab === 'diagram'} onClick={() => setMobileTab('diagram')} icon={<Network size={14} />} label="Схема" />
         <MobileTabButton active={mobileTab === 'events'} onClick={() => setMobileTab('events')} icon={<List size={14} />} label="События" />
         <MobileTabButton active={mobileTab === 'details'} onClick={() => setMobileTab('details')} icon={<MessageSquareText size={14} />} label="Пояснение" />
@@ -84,7 +84,7 @@ export function MessagePage() {
           <div className="flex min-h-0 flex-col lg:h-full">
             <div className="min-h-0 overflow-auto scrollbar-thin lg:flex-1"><TopologyGraph scenario={scenario} step={step} /></div>
             <div className="hidden h-[238px] min-h-0 border-t border-border lg:block"><EventLog scenario={scenario} current={current} onSelect={selectStep} /></div>
-            <PlayerControls scenario={scenario} current={current} onChange={selectStep} />
+            <div className="max-lg:hidden"><PlayerControls scenario={scenario} current={current} onChange={selectStep} /></div>
           </div>
         </main>
 
@@ -100,7 +100,8 @@ export function MessagePage() {
           </div>
         </aside>
       </div>
-      <GlossaryDialog termId={termId} onClose={() => setTermId(null)} />
+      <div className="fixed inset-x-0 bottom-0 z-30 lg:hidden"><PlayerControls scenario={scenario} current={current} onChange={selectStep} /></div>
+      <GlossaryDialog termId={termId} onClose={() => setTermId(null)} onOpenScenario={() => { setTermId(null); setMobileTab('diagram') }} />
     </div>
   )
 }

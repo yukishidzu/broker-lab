@@ -8,12 +8,12 @@ export function StepExplanation({ step, onOpenTerm }: { step: ScenarioStep; onOp
     <article className="p-4">
       <Badge>Текущий этап</Badge>
       <h2 className="mt-3 text-lg font-semibold leading-snug">{step.title}</h2>
-      <p className="mt-3 text-sm font-medium leading-6">{step.summary}</p>
-      <p className="mt-3 text-sm leading-7 text-muted-foreground">{step.explanation}</p>
+      <p className="mt-3 text-sm font-medium leading-6 max-lg:text-[15px]">{step.summary}</p>
+      <p className="mt-3 text-sm leading-7 text-muted-foreground max-lg:text-[15px]">{step.explanation}</p>
       <section className="mt-5 border-t border-border pt-4">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Технические детали</h3>
         <ul className="mt-2 space-y-2">
-          {step.technical.map((item) => <li key={item} className="flex gap-2 text-xs leading-5 text-muted-foreground"><span className="mt-2 size-1 shrink-0 rounded-full bg-muted-foreground" />{item}</li>)}
+          {step.technical.map((item) => <li key={item} className="flex gap-2 text-xs leading-5 text-muted-foreground max-lg:text-sm"><span className="mt-2 size-1 shrink-0 rounded-full bg-muted-foreground" />{item}</li>)}
         </ul>
       </section>
       <section className="mt-5 border-t border-border pt-4">

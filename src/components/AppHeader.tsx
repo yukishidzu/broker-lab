@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BookOpen, Moon, Search, Sun, Waypoints } from 'lucide-react'
 import { useTheme } from '../lib/theme'
 import { cn } from '../lib/utils'
@@ -15,11 +15,22 @@ const navigation = [
 export function AppHeader({ hash }: { hash: string }) {
   const { dark, change } = useTheme()
   const [searchOpen, setSearchOpen] = useState(false)
+  const previousFocus = useRef<HTMLElement | null>(null)
+
+  const openSearch = () => {
+    previousFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    setSearchOpen(true)
+  }
+  const changeSearchOpen = (open: boolean) => {
+    setSearchOpen(open)
+    if (!open) requestAnimationFrame(() => previousFocus.current?.focus())
+  }
 
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault()
+        previousFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
         setSearchOpen(true)
       }
     }
@@ -42,7 +53,7 @@ export function AppHeader({ hash }: { hash: string }) {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-1">
-          <Button variant="outline" size="sm" onClick={() => setSearchOpen(true)} className="max-md:size-9 max-md:px-0">
+          <Button variant="outline" size="sm" onClick={openSearch} className="max-md:size-9 max-md:px-0">
             <Search size={15} /><span aria-hidden="true" className="max-md:hidden">Поиск</span><kbd aria-hidden="true" className="ml-2 rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground max-lg:hidden">Ctrl K</kbd><span className="sr-only">Поиск</span>
           </Button>
           <Tooltip label={dark ? 'Включить светлую тему' : 'Включить тёмную тему'}>
@@ -62,7 +73,7 @@ export function AppHeader({ hash }: { hash: string }) {
           </a>
         ))}
       </nav>
-      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
+      <SearchDialog open={searchOpen} onOpenChange={changeSearchOpen} />
     </header>
   )
 }

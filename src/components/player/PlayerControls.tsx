@@ -10,7 +10,7 @@ export function PlayerControls({ scenario, current, onChange }: {
 }) {
   const last = current === scenario.steps.length - 1
   return (
-    <div className="border-t border-border bg-card p-3">
+    <div className="border-t border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
       <div className="mb-3 flex items-center gap-3">
         <span className="shrink-0 font-mono text-[11px] text-muted-foreground">{current + 1} / {scenario.steps.length}</span>
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary" role="progressbar" aria-label="Прогресс по сценарию" aria-valuemin={1} aria-valuemax={scenario.steps.length} aria-valuenow={current + 1}>
