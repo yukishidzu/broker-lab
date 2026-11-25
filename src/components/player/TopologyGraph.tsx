@@ -29,7 +29,7 @@ function DesktopNode({ node, step, messageId, branch = false }: { node: Topology
   const Icon = icons[node.kind]
   const active = step.activeNodes.includes(node.id)
   return (
-    <div data-branch-node-id={branch ? node.id : undefined} className={cn('relative min-h-[142px] rounded-xl border border-border bg-card p-3 transition-colors', active && 'border-primary/60 bg-primary/[0.04]', branch && 'min-h-[112px] border-dashed bg-background')}>
+    <div data-branch-node-id={branch ? node.id : undefined} className={cn('relative min-h-[142px] rounded-xl border border-border bg-card p-3 transition-colors', active && 'border-primary/60 bg-primary/[0.04]', branch && 'min-h-[112px] scroll-my-4 border-dashed bg-background')}>
       <div className="flex items-start justify-between gap-2">
         <span className={cn('grid size-8 place-items-center rounded-lg bg-secondary text-muted-foreground', active && 'bg-primary/12 text-primary')}><Icon size={16} /></span>
         {node.badge && <Badge className="text-[10px]">{node.badge}</Badge>}
@@ -88,7 +88,7 @@ export function TopologyGraph({ scenario, step }: { scenario: ScenarioDefinition
     }
     const branchId = step.activeNodes.find((id) => nodeById.get(id)?.branchOf)
     const branch = branchId ? container?.querySelector<HTMLElement>(`[data-branch-node-id="${branchId}"]`) : null
-    branch?.scrollIntoView({ block: 'center', inline: 'nearest', behavior })
+    branch?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior })
   }, [step.id, step.messageNode, step.activeNodes, nodeById])
 
   return (
