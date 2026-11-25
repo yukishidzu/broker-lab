@@ -4,6 +4,6 @@
 
 RabbitMQ показывает публикацию через direct exchange, маршрутизацию по binding, хранение в queue, publisher confirm, delivery, обработку и consumer ack.
 
-Kafka показывает запись в partition log, offset, ISR, producer acknowledgements, poll, обработку и offset commit. Запись остаётся в log после commit.
+Kafka показывает запись в partition log, offset, ISR, producer acknowledgements, poll, обработку и offset commit. Локальная consumer position после poll указывает на следующую запись, а committed position остаётся прежней до commit. Запись остаётся в log после commit.
 
 Модель не эмулирует сетевой протокол и не измеряет реальную производительность. Условное время нужно только для порядка событий. Переключение брокера использует смысловые контрольные точки, поскольку число и состав внутренних шагов различаются.

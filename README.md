@@ -40,3 +40,6 @@ VITE_BASE=/broker-lab/ pnpm build
 
 - [План продукта](docs/PRODUCT_PLAN.md)
 - [Дизайн-система](docs/LEARNING_DESIGN_SYSTEM.md)
+- [Архитектура](docs/ARCHITECTURE.md)
+- [Модель симуляции](docs/SIMULATION_MODEL.md)
+- [Проверка качества](docs/QUALITY.md)
