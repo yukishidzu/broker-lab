@@ -1,0 +1,33 @@
+import { expect, test } from '@playwright/test'
+
+test('compares delivery failure outcomes and idempotency', async ({ page }) => {
+  await page.goto('/#/delivery')
+  await expect(page.getByRole('heading', { name: 'Гарантии доставки и обработки' })).toBeVisible()
+  await page.getByRole('button', { name: /At most once/ }).click()
+  await page.getByRole('button', { name: 'Далее', exact: true }).click()
+  await page.getByRole('button', { name: 'Далее', exact: true }).click()
+  await page.getByRole('button', { name: 'Далее', exact: true }).click()
+  await expect(page.getByText('Запись прочитана, но платёж не создан.')).toBeVisible()
+  await page.getByRole('button', { name: /At least once/ }).click()
+  await page.getByRole('switch', { name: 'Идемпотентный consumer' }).click()
+  await expect(page.getByRole('switch', { name: 'Идемпотентный consumer' })).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByText('Доставка повторена, но платёж остался одним.')).toBeVisible()
+})
+
+test('assigns partitions, shows independent groups and rebalances a stopped consumer', async ({ page }) => {
+  await page.goto('/#/kafka-groups')
+  await expect(page.getByText('2 / 2', { exact: true })).toBeVisible()
+  await expect(page.getByText('Простаивает · partitions не назначены')).toHaveCount(2)
+  await page.getByRole('button', { name: 'Доставить', exact: true }).click()
+  await expect(page.getByText('1 / 8 записей доставлено')).toBeVisible()
+  await page.getByRole('button', { name: 'Две независимые группы' }).click()
+  await expect(page.getByRole('switch', { name: 'Показать группу analytics' })).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByText('analytics', { exact: true })).toHaveCount(2)
+  await page.getByRole('button', { name: /2 partitions · 4 consumers/ }).click()
+  await page.getByRole('button', { name: 'Остановить', exact: true }).first().click()
+  await expect(page.getByText('Остановлен', { exact: true })).toBeVisible()
+  await expect(page.getByText('consumer 3', { exact: true }).first()).toBeVisible()
+  await page.getByRole('button', { name: '4 partitions · 2 consumers' }).click()
+  await expect(page.getByText('Читает: P0, P2')).toBeVisible()
+  await expect(page.getByText('Читает: P1, P3')).toBeVisible()
+})
