@@ -49,5 +49,5 @@ export function RetryLab() {
 }
 
 function FlowNode({ active = false, tone, children }: { active?: boolean; tone?: string; children: React.ReactNode }) {
-  return <span className={cn('rounded-lg bg-secondary px-3 py-2 font-mono text-[11px]', active && tone === 'success' && 'bg-success/10 text-success', active && tone === 'dlq' && 'bg-destructive/10 text-destructive', active && tone === 'retry' && 'bg-warning/10 text-warning')}>{children}</span>
+  return <span className={cn('rounded-lg bg-secondary px-3 py-2 font-mono text-[11px]', active && tone === 'success' && 'bg-success/10 text-success', active && tone === 'dlq' && 'bg-destructive/10 text-foreground', active && tone === 'retry' && 'bg-warning/10 text-warning')}>{children}</span>
 }

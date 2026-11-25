@@ -56,7 +56,7 @@ export function RoutingLab() {
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {bindings.map((binding) => {
               const matches = routed.includes(binding.queue)
-              return <article key={binding.queue} className={cn('rounded-xl border border-border p-3 transition-colors', matches ? 'border-primary/50 bg-primary/[0.05]' : 'bg-background opacity-70')}>
+              return <article key={binding.queue} className={cn('rounded-xl border border-border p-3 transition-colors', matches ? 'border-primary/50 bg-primary/[0.05]' : 'bg-secondary/30')}>
                 <div className="flex items-center justify-between gap-2"><h3 className="font-mono text-sm font-semibold">{binding.queue}</h3>{matches ? <Check size={16} className="text-success" /> : <X size={15} className="text-muted-foreground" />}</div>
                 <p className={cn('mt-1 text-xs', matches ? 'text-success' : 'text-muted-foreground')}>{matches ? 'Получает копию сообщения' : binding.enabled ? 'Binding не совпал' : 'Binding отключён'}</p>
                 {(exchange === 'direct' || exchange === 'topic') && <label className="mt-3 block text-[10px] uppercase tracking-wide text-muted-foreground">Binding key<input value={binding.bindingKey} onChange={(event) => updateBinding(binding.queue, { bindingKey: event.target.value })} className="mt-1 h-9 w-full rounded-lg border border-input bg-background px-2 font-mono text-xs outline-none focus:border-ring" /></label>}
