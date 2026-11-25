@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Network, ShieldCheck, Split, UsersRound } from 'lucide-react'
+import { ArrowRight, Check, Gauge, Network, ShieldCheck, Split, TimerReset, UsersRound } from 'lucide-react'
 import { scenarioList } from '../content/scenarios'
 import { Badge } from '../components/ui/badge'
 
@@ -34,6 +34,11 @@ export function ScenariosPage() {
           <a href="#/kafka-groups" className="group rounded-xl border border-border bg-card p-5 hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-ring"><UsersRound size={22} className="text-primary" /><h3 className="mt-4 font-semibold">Kafka consumer groups</h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">Настройка partitions и consumers, 4 consumers на 2 partitions, несколько partitions на consumer, две группы и rebalance.</p><span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-primary">Открыть лабораторию<ArrowRight size={14} /></span></a>
         </div>
       </section>
+      <section className="mt-10" aria-labelledby="advanced-labs"><div className="mb-4"><h2 id="advanced-labs" className="text-base font-semibold">Дополнительные лаборатории</h2><p className="mt-1 text-xs text-muted-foreground">Настраиваемые модели для отдельных механизмов брокеров.</p></div><div className="grid gap-4 md:grid-cols-3">
+        <LabLink href="#/labs/routing" icon={<Split size={20} />} title="RabbitMQ routing">Direct, topic, fanout и headers exchanges, bindings, копии сообщений и unroutable.</LabLink>
+        <LabLink href="#/labs/retry" icon={<TimerReset size={20} />} title="Retry и DLQ">Backoff, poison message, delivery-limit, DLX и прикладные retry/DLQ topics Kafka.</LabLink>
+        <LabLink href="#/labs/capacity" icon={<Gauge size={20} />} title="Capacity и lag">Входящий темп, время обработки, partitions, consumers и накопление lag/backlog.</LabLink>
+      </div></section>
       <section className="mt-10 rounded-xl border border-border bg-card p-5">
         <h2 className="text-sm font-semibold">Что смотреть в обоих вариантах</h2>
         <div className="mt-3 grid gap-3 text-sm leading-relaxed text-muted-foreground md:grid-cols-3">
@@ -44,4 +49,9 @@ export function ScenariosPage() {
       </section>
     </main>
   )
+}
+
+
+function LabLink({ href, icon, title, children }: { href: string; icon: React.ReactNode; title: string; children: React.ReactNode }) {
+  return <a href={href} className="rounded-xl border border-border bg-card p-5 hover:border-primary/50 focus-visible:outline-2 focus-visible:outline-ring"><span className="text-primary">{icon}</span><h3 className="mt-4 font-semibold">{title}</h3><p className="mt-2 text-sm leading-relaxed text-muted-foreground">{children}</p><span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-primary">Открыть<ArrowRight size={14} /></span></a>
 }

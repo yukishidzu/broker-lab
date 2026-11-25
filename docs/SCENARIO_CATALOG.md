@@ -31,3 +31,17 @@ RabbitMQ: producer → direct exchange → queue → consumer → БД → ack. 
 - Остановка consumer показывает один допустимый rebalance.
 
 Round-robin и распределение ключей являются наглядной моделью, а не обещанием конкретного production assignor. Инварианты назначения соответствуют документации Kafka.
+
+## Дополнительные лаборатории
+
+### `/#/labs/routing`
+
+Direct/topic/fanout/headers exchanges, редактируемые bindings, routing keys и headers. Показывает независимые направления одной публикации, topic wildcards, отключение binding и unroutable с mandatory/return.
+
+### `/#/labs/retry`
+
+Временная ошибка и poison message, лимит попыток и exponential backoff. RabbitMQ использует delivery-limit и DLX; Kafka показывает блокирующий retry, отдельный retry topic и прикладную публикацию в DLQ topic.
+
+### `/#/labs/capacity`
+
+Сравнение входящего темпа с простой моделью capacity. Учитывает время обработки, partitions и consumers, показывает рост lag/backlog за 60 секунд и ориентировочное восстановление после остановки публикации. Это не бенчмарк реального брокера.

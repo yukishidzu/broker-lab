@@ -179,6 +179,48 @@ export const glossaryTerms: GlossaryTerm[] = [
     description: 'Отдельный publisher переносит outbox-записи в брокер и может повторять публикацию. Поэтому consumer всё равно должен учитывать дубли.',
     mistake: 'Outbox не делает публикацию и consumer-обработку одной глобальной транзакцией.', source: kafkaSource,
   },
+  {
+    id: 'topic-exchange', title: 'Topic exchange', english: 'topic exchange / topic patterns', category: 'RabbitMQ',
+    short: 'Exchange с маршрутизацией по словам routing key и шаблонам binding key.',
+    description: '* заменяет ровно одно слово, # — ноль или больше слов. Например, order.eu.* совпадает с order.eu.paid, а order.# — с order и order.eu.paid.',
+    mistake: 'Звёздочка не означает любое число слов: для этого используется #.', source: { title: 'RabbitMQ — topics', url: 'https://www.rabbitmq.com/tutorials/tutorial-five-python' },
+  },
+  {
+    id: 'dlx', title: 'Dead letter exchange', english: 'DLX', category: 'RabbitMQ',
+    short: 'Обычный exchange, куда RabbitMQ повторно публикует dead-lettered сообщения.',
+    description: 'Причины включают reject/nack без requeue, TTL, превышение длины queue и delivery-limit quorum queue. DLX выбирается настройками исходной queue.',
+    mistake: 'DLX не гарантирует сохранность при любой топологии: публикация в него тоже может завершиться неудачей.', source: { title: 'RabbitMQ — DLX', url: 'https://www.rabbitmq.com/docs/dlx' },
+  },
+  {
+    id: 'dlq', title: 'Dead letter queue', english: 'DLQ', category: 'Надёжность',
+    short: 'Назначение для сообщений, которые не удалось обработать штатным потоком.',
+    description: 'В RabbitMQ это обычно queue, получающая сообщения через DLX. В Kafka DLQ — отдельный topic, публикацию в который реализует приложение. Нужны мониторинг и процесс разбора.',
+    mistake: 'Перемещение в DLQ не исправляет сообщение и не означает успешную бизнес-обработку.', source: { title: 'RabbitMQ — DLX', url: 'https://www.rabbitmq.com/docs/dlx' },
+  },
+  {
+    id: 'backoff', title: 'Backoff и jitter', english: 'exponential backoff / jitter', category: 'Надёжность',
+    short: 'Задержка между повторами и случайный разброс этой задержки.',
+    description: 'Exponential backoff увеличивает паузу между попытками, jitter разносит повторы разных consumers во времени. Лимит попыток и DLQ нужны отдельно.',
+    mistake: 'Увеличение паузы не превращает постоянную ошибку данных во временную.', source: confirmSource,
+  },
+  {
+    id: 'backpressure', title: 'Backpressure', english: 'backpressure', category: 'Надёжность',
+    short: 'Ограничение принимаемой работы, когда обработчик не успевает за входящим потоком.',
+    description: 'В RabbitMQ prefetch ограничивает unacked deliveries. В Kafka управление poll и обработкой влияет на темп чтения. Backlog/lag показывает последствия дефицита capacity.',
+    mistake: 'Бесконечное наращивание буферов не устраняет дефицит обработки.', source: rabbitSource,
+  },
+  {
+    id: 'ordering', title: 'Порядок сообщений', english: 'message ordering', category: 'Надёжность',
+    short: 'Гарантия порядка всегда имеет область: partition, queue, ключ или сущность.',
+    description: 'Kafka упорядочивает записи внутри partition. RabbitMQ очередь стремится к FIFO, но повторные доставки, приоритеты и параллельная обработка могут изменить наблюдаемый порядок эффектов.',
+    mistake: 'Порядок публикации не гарантирует глобальный порядок завершения параллельной обработки.', source: kafkaSource,
+  },
+  {
+    id: 'capacity', title: 'Capacity', english: 'processing capacity', category: 'Надёжность',
+    short: 'Объём работы, который система способна обрабатывать за единицу времени.',
+    description: 'Для простой последовательной модели: активные consumers × 1000 / время обработки в мс. Реальный результат дополнительно ограничен БД, downstream, сетью, batching и брокером.',
+    mistake: 'Количество запущенных consumers не равно полезному параллелизму, если partitions меньше или есть другой bottleneck.', source: kafkaSource,
+  },
 ]
 
 export const glossaryById = new Map(glossaryTerms.map((term) => [term.id, term]))

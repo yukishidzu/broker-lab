@@ -8,6 +8,9 @@ import { Input } from './ui/input'
 const referencePages = [
   { title: 'Гарантии доставки', description: 'At most once, at least once, transactions и идемпотентность', hash: '/delivery', keywords: 'гарантии доставка exactly at least at most дубли ack commit' },
   { title: 'Kafka consumer groups', description: 'Partitions, consumers, две группы и rebalance', hash: '/kafka-groups', keywords: 'consumer group партиции partitions consumers rebalance группы' },
+  { title: 'RabbitMQ routing', description: 'Direct, topic, fanout, headers и bindings', hash: '/labs/routing', keywords: 'exchange direct topic fanout headers routing binding маршрутизация' },
+  { title: 'Retry и DLQ', description: 'Backoff, poison message, DLX и retry topics', hash: '/labs/retry', keywords: 'retry dlq dlx backoff poison повторы доставка' },
+  { title: 'Capacity и lag', description: 'Нагрузка, consumers, partitions и backlog', hash: '/labs/capacity', keywords: 'capacity lag backlog throughput нагрузка partitions consumers' },
 ]
 
 export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
